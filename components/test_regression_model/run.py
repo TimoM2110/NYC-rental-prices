@@ -28,11 +28,12 @@ def go(args):
     cwd = os.path.dirname(os.path.abspath(__file__))
     # Download input artifact. This will also log that this script is using this
     # particular version of the artifact
-    model_local_path = run.use_artifact(args.mlflow_model).download() #"/home/timom2110/anaconda3/envs/nyc_airbnb_dev/NYC-rental-prices/components/test_regression_model/artifacts/random_forest_export_v23"
-    path_new = ''.join(model_local_path.split('.', 1))#str(model_local_path[1:]).strip('')
-    path_new2 = ''.join(path_new.split('/', 1))
-    path_new3 = path_new2.replace(':', '_')
-    new_one = os.path.join(cwd, path_new3)
+    model_local_path = run.use_artifact(args.mlflow_model).download('./artifacts/random_forest_export_v23') #"/home/timom2110/anaconda3/envs/nyc_airbnb_dev/NYC-rental-prices/components/test_regression_model/artifacts/random_forest_export_v23"
+    #logger.info(model_local_path)
+    #path_new = ''.join(model_local_path.split('.', 1))#str(model_local_path[1:]).strip('')
+    #path_new2 = ''.join(path_new.split('/', 1))
+    #path_new3 = path_new2.replace(':', '_')
+    #new_one = os.path.join(cwd, path_new3)
     # ATTENTION: W&B STORING FILES WITH : WHICH IS NOT POSSIBLE FOR WINDOWS FILES; THUS ALSO REPLACE : WITH _ IN DIRECTORY
     
     # Download test dataset 
@@ -43,7 +44,7 @@ def go(args):
     y_test = x_test.pop("price")
 
     logger.info("Loading model and performing inference on test set")
-    sk_pipe = mlflow.sklearn.load_model(new_one)
+    sk_pipe = mlflow.sklearn.load_model(model_local_path)
     y_pred = sk_pipe.predict(x_test)
 
     logger.info("Scoring")

@@ -27,14 +27,14 @@ def go(args):
 
     df = pd.read_csv(
         artifact_local_path,
-        index_col = "id"
+        index_col="id"
     )
 
     # The price limitations will be set from the command line (e.g. hydra, config.yaml)
     # See also the Top-level script environment below
     min_price = args.min_price
     max_price = args.max_price
-    
+
     # Removing outliers
     idx = df['price'].between(min_price, max_price)
     df = df[idx].copy()
@@ -51,7 +51,8 @@ def go(args):
     )
 
     # Location should be in and around NYC
-    idx = df['longitude'].between(-74.25, -73.50) & df['latitude'].between(40.5, 41.2)
+    idx = df['longitude'].between(-74.25, -
+                                  73.50) & df['latitude'].between(40.5, 41.2)
     df = df[idx].copy()
     logger.info(
         "Property location is now in and around NYC"
@@ -78,49 +79,47 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="A very basic data cleaning")
 
-
     parser.add_argument(
-        "--input_artifact", 
+        "--input_artifact",
         type=str,
         help="Name of the input artifact",
         required=True
     )
 
     parser.add_argument(
-        "--output_artifact", 
+        "--output_artifact",
         type=str,
         help="Name of the output artifact",
         required=True
     )
 
     parser.add_argument(
-        "--output_type", 
+        "--output_type",
         type=str,
         help="The type of the output artifact",
         required=True
     )
 
     parser.add_argument(
-        "--output_description", 
+        "--output_description",
         type=str,
         help="A short description of the Output Artifact",
         required=True
     )
 
     parser.add_argument(
-        "--min_price", 
+        "--min_price",
         type=float,
         help="Minimum threshold for outlier cutting",
         required=True
     )
 
     parser.add_argument(
-        "--max_price", 
+        "--max_price",
         type=float,
         help="Maximum threshold for outlier cutting",
         required=True
     )
-
 
     args = parser.parse_args()
 

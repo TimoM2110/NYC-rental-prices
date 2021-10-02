@@ -27,10 +27,12 @@ def go(args):
     # Download input artifact. This will also log that this script is using this
     # particular version of the artifact
     # ATTENTION: W&B STORING FILES WITH : WHICH IS NOT POSSIBLE FOR WINDOWS FILES
-    # if you are tying to work around, try with whole path cwd = os.path.dirname(os.path.abspath(__file__))
-    model_local_path = run.use_artifact(args.mlflow_model).download('./artifacts/random_forest_export_v23')
-    
-    # Download test dataset 
+    # if you are tying to work around, try with whole path cwd =
+    # os.path.dirname(os.path.abspath(__file__))
+    model_local_path = run.use_artifact(args.mlflow_model).download(
+        './artifacts/random_forest_export_v23')
+
+    # Download test dataset
     test_dataset_path = run.use_artifact(args.test_dataset).file()
 
     # Read test dataset

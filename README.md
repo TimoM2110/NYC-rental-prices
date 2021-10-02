@@ -168,7 +168,7 @@ In order to run the Pipeline without cloning it, simply enter the following into
 ## Testing
 In order to test the trained model, you have to run it separately from the command line typing:
 ```bash
->  > mlflow run . -P steps=test_regression_model
+> mlflow run . -P steps=test_regression_model
 ```
 
 ## License

@@ -10,7 +10,7 @@ import scipy.stats
 
 def test_column_names(data):
     """
-    testing if the given columns match the 
+    testing if the given columns match the
     defined columns below
     """
 
@@ -41,7 +41,8 @@ def test_column_names(data):
                  list(these_columns))
 
     # This also enforces the same order
-    assert list(expected_colums) == list(these_columns), "The given columns are not matching expected columns"
+    assert list(expected_colums) == list(
+        these_columns), "The given columns are not matching expected columns"
 
 
 def test_neighborhood_names(data):
@@ -54,23 +55,25 @@ def test_neighborhood_names(data):
     neigh = set(data['neighbourhood_group'].unique())
 
     # Unordered check
-    assert set(known_names) == set(neigh), "Given dataset does not contain neighborhood names"
+    assert set(known_names) == set(
+        neigh), "Given dataset does not contain neighborhood names"
 
 
 def test_proper_boundaries(data: pd.DataFrame):
     """
     Test proper longitude and latitude boundaries for properties in and around NYC
     """
-    idx = data['longitude'].between(-74.25, -73.50) & data['latitude'].between(40.5, 41.2)
+    idx = data['longitude'].between(-74.25, -
+                                    73.50) & data['latitude'].between(40.5, 41.2)
 
     assert np.sum(~idx) == 0, "There are properties located out of NYC"
 
 
 def test_similar_neigh_distrib(
-        data: pd.DataFrame,
-        ref_data: pd.DataFrame,
-        kl_threshold: float
-    ):
+    data: pd.DataFrame,
+    ref_data: pd.DataFrame,
+    kl_threshold: float
+):
     """
     Apply a threshold on the KL divergence to detect if the distribution of the new data is
     significantly different than that of the reference dataset
@@ -78,7 +81,8 @@ def test_similar_neigh_distrib(
     dist1 = data['neighbourhood_group'].value_counts().sort_index()
     dist2 = ref_data['neighbourhood_group'].value_counts().sort_index()
 
-    assert scipy.stats.entropy(dist1, dist2, base=2) < kl_threshold, "Significant divergence in the distribution of reference dataset"
+    assert scipy.stats.entropy(
+        dist1, dist2, base=2) < kl_threshold, "Significant divergence in the distribution of reference dataset"
 
 
 def test_row_count(data):
@@ -87,11 +91,12 @@ def test_row_count(data):
     """
     assert 15000 < data.shape[0] < 1000000, "row count is too high/low"
 
+
 def test_price_range(
-        data: pd.DataFrame,
-        min_price: float,
-        max_price: float
-    ):
+    data: pd.DataFrame,
+    min_price: float,
+    max_price: float
+):
     """
     Checking if price is between desired price range
     """

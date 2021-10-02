@@ -31,7 +31,8 @@ def delta_date_feature(dates):
     between each date and the most recent date in its column
     """
     date_sanitized = pd.DataFrame(dates).apply(pd.to_datetime)
-    return date_sanitized.apply(lambda d: (d.max() -d).dt.days, axis=0).to_numpy()
+    return date_sanitized.apply(lambda d: (
+        d.max() - d).dt.days, axis=0).to_numpy()
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
@@ -58,7 +59,8 @@ def go(args):
     trainval_local_path = run.use_artifact(args.trainval_artifact).file()
 
     X = pd.read_csv(trainval_local_path)
-    y = X.pop("price")  # this removes the column "price" from X and puts it into y
+    # this removes the column "price" from X and puts it into y
+    y = X.pop("price")
 
     logger.info(f"Minimum price: {y.min()}, Maximum price: {y.max()}")
 
@@ -144,14 +146,16 @@ def go(args):
     # Upload to W&B the feature importance visualization
     run.log(
         {
-          "feature_importance": wandb.Image(fig_feat_imp),
+            "feature_importance": wandb.Image(fig_feat_imp),
         }
     )
     logging.info("uploading feature importance done")
 
+
 def plot_feature_importance(pipe, feat_names):
     # We collect the feature importance for all non-nlp features first
-    feat_imp = pipe["random_forest"].feature_importances_[: len(feat_names)-1]
+    feat_imp = pipe["random_forest"].feature_importances_[
+        : len(feat_names) - 1]
     # For the NLP feature we sum across all the TF-IDF dimensions into a global
     # NLP importance
     nlp_importance = sum(
@@ -211,7 +215,10 @@ def get_inference_pipeline(rf_config, max_tfidf_features):
     # a review for a long time), and then we create a new feature from it,
     date_imputer = make_pipeline(
         SimpleImputer(strategy='constant', fill_value='2010-01-01'),
-        FunctionTransformer(delta_date_feature, check_inverse=False, validate=False)
+        FunctionTransformer(
+            delta_date_feature,
+            check_inverse=False,
+            validate=False)
     )
 
     # Some minimal NLP for the "name" column
@@ -230,7 +237,9 @@ def get_inference_pipeline(rf_config, max_tfidf_features):
     preprocessor = ColumnTransformer(
         transformers=[
             ("ordinal_cat", ordinal_categorical_preproc, ordinal_categorical),
-            ("non_ordinal_cat", non_ordinal_categorical_preproc, non_ordinal_categorical),
+            ("non_ordinal_cat",
+             non_ordinal_categorical_preproc,
+             non_ordinal_categorical),
             ("impute_zero", zero_imputer, zero_imputed),
             ("transform_date", date_imputer, ["last_review"]),
             ("transform_name", name_tfidf, ["name"])
@@ -238,7 +247,8 @@ def get_inference_pipeline(rf_config, max_tfidf_features):
         remainder="drop",  # This drops the columns that we do not transform
     )
 
-    processed_features = ordinal_categorical + non_ordinal_categorical + zero_imputed + ["last_review", "name"]
+    processed_features = ordinal_categorical + \
+        non_ordinal_categorical + zero_imputed + ["last_review", "name"]
 
     # Create random forest
     random_forest = RandomForestRegressor(**rf_config)

@@ -1,0 +1,34 @@
+name: basic_cleaning
+conda_env: conda.yml
+
+entry_points:
+  main:
+    parameters:
+
+      input_artifact:
+        description: Input file (.csv) that should be preprocessed
+        type: string
+
+      output_artifact:
+        description: Preprocessed Output file (.csv) that will be saved
+        type: string
+
+      output_type:
+        description: The Artifact type that will be stored in W&B
+        type: string
+
+      output_description:
+        description: The artifact description that will be stored in W&B
+        type: string
+
+      min_price:
+        description: In order to remove outliers, set the minimum price to be kept
+        type: string
+
+      max_price:
+        description: In order to remove outliers, set the maximum price to be kept
+        type: string
+
+
+    command: >-
+        python run.py  --input_artifact {input_artifact}  --output_artifact {output_artifact}  --output_type {output_type}  --output_description {output_description}  --min_price {min_price}  --max_price {max_price} 

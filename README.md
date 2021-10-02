@@ -6,7 +6,7 @@ to be retrained with the same cadence, necessitating an end-to-end pipeline that
 
 This project contains such a pipeline.
 
-[Link to W&B Account](https://wandb.ai/timom2110/nyc_airbnb?workspace=user-timom2110)
+[Link to W&B Account](https://wandb.ai/timom2110/nyc_airbnb?workspace=user-timom2110) <br>
 [Link to Github](https://github.com/TimoM2110/NYC-rental-prices)
 
 ## Table of contents
@@ -20,6 +20,8 @@ This project contains such a pipeline.
   * [The configuration](#the-configuration)
   * [Running the entire pipeline or just a selection of steps](#Running-the-entire-pipeline-or-just-a-selection-of-steps)
   * [components](#components)
+- [Running from remote](#Running-from-remote)
+- [Testing](#Testing)
 
 ## Preliminary steps
 ### Get this Pipeline on your locacl machine
@@ -154,6 +156,20 @@ You can see the parameters that they require by looking into their `MLproject` f
 
 - `get_data`: downloads the data. [MLproject](https://github.com/TimoM2110/NYC-rental-prices/blob/master/components/get_data/MLproject)
 - `train_val_test_split`: segrgate the data (splits the data) [MLproject](https://github.com/TimoM2110/NYC-rental-prices/blob/master/components/train_val_test_split/MLproject)
+
+## Running from remote
+In order to run the Pipeline without cloning it, simply enter the following into your command line:
+```bash
+> mlflow run https://github.com/TimoM2110/NYC-rental-prices.git \
+  -v [the version you want to use, like 1.0.0] \
+  -P hydra_options=[Options you want to override, example: "etl.sample='sample2.csv'"]
+```
+
+## Testing
+In order to test the trained model, you have to run it separately from the command line typing:
+```bash
+>  > mlflow run . -P steps=test_regression_model
+```
 
 ## License
 

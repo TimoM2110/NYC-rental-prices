@@ -23,18 +23,12 @@ def go(args):
     """
     run = wandb.init(job_type="test_model")
     run.config.update(args)
-
     logger.info("Downloading artifacts")
-    cwd = os.path.dirname(os.path.abspath(__file__))
     # Download input artifact. This will also log that this script is using this
     # particular version of the artifact
-    model_local_path = run.use_artifact(args.mlflow_model).download('./artifacts/random_forest_export_v23') #"/home/timom2110/anaconda3/envs/nyc_airbnb_dev/NYC-rental-prices/components/test_regression_model/artifacts/random_forest_export_v23"
-    #logger.info(model_local_path)
-    #path_new = ''.join(model_local_path.split('.', 1))#str(model_local_path[1:]).strip('')
-    #path_new2 = ''.join(path_new.split('/', 1))
-    #path_new3 = path_new2.replace(':', '_')
-    #new_one = os.path.join(cwd, path_new3)
-    # ATTENTION: W&B STORING FILES WITH : WHICH IS NOT POSSIBLE FOR WINDOWS FILES; THUS ALSO REPLACE : WITH _ IN DIRECTORY
+    # ATTENTION: W&B STORING FILES WITH : WHICH IS NOT POSSIBLE FOR WINDOWS FILES
+    # if you are tying to work around, try with whole path cwd = os.path.dirname(os.path.abspath(__file__))
+    model_local_path = run.use_artifact(args.mlflow_model).download('./artifacts/random_forest_export_v23')
     
     # Download test dataset 
     test_dataset_path = run.use_artifact(args.test_dataset).file()
